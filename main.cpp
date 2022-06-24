@@ -14,7 +14,6 @@
 #define PLANE_STD_CSTDLIB_
 #endif // !PLANE_STD_CSTDLIB_
 
-
 #ifndef PLANE_STD_WINDOWS_H_
 #include <Windows.h>
 #define PLANE_STD_WINDOWS_H_
@@ -63,7 +62,6 @@ int OpenUSB(LPCTSTR PscSerialNumber)
 	return 0;
 }
 
-//关闭USB-HID设备
 /*********************************************************
 函数名称： CloseUSB(hid_device*& handle)
 函数功能： 关闭USB-HID设备
@@ -155,116 +153,12 @@ int main()
 				SendMsg(handle, reinterpret_cast<unsigned char*> ("00001"));
 				std::cout << "VK_SPACE ";
 			}
-			if (key_link.check('1'))
+			if (GetAsyncKeyState(VK_SPACE))
 			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("00010"));
-				std::cout << "1 ";
+				SendMsg(handle, reinterpret_cast<unsigned char*> ("00001"));
+				std::cout << "VK_SPACE ";
 			}
-			if (key_link.check('2'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("00011"));
-				std::cout << "2 ";
-			}
-			if (key_link.check('3'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("00100"));
-				std::cout << "3 ";
-			}
-			if (key_link.check('4'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("00101"));
-				std::cout << "4 ";
-			}
-			if (key_link.check('5'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("00110"));
-				std::cout << "5 ";
-			}
-			if (key_link.check('6'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("00111"));
-				std::cout << "6 ";
-			}
-			if (key_link.check('7'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("01000"));
-				std::cout << "7 ";
-			}
-			if (key_link.check('8'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("01001"));
-				std::cout << "8 ";
-			}
-			if (key_link.check('9'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("01010"));
-				std::cout << "9 ";
-			}
-			if (key_link.check('0'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("01011"));
-				std::cout << "0 ";
-			}
-			if (key_link.check('T'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("01100"));
-				std::cout << "T ";
-			}
-			if (!key_link.check('T'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("01101"));
-				std::cout << "t ";
-			}
-			if (key_link.check('Y'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("01110"));
-				std::cout << "Y ";
-			}
-			if (!key_link.check('Y'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("01111"));
-				std::cout << "y ";
-			}
-			if (key_link.check('G'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("10000"));
-				std::cout << "G ";
-			}
-			if (!key_link.check('G'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("10001"));
-				std::cout << "g ";
-			}
-			if (key_link.check('H'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("10010"));
-				std::cout << "H ";
-			}
-			if (!key_link.check('H'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("10011"));
-				std::cout << "h ";
-			}
-			if (key_link.check('V'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("10100"));
-				std::cout << "V ";
-			}
-			if (!key_link.check('V'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("10101"));
-				std::cout << "v ";
-			}
-			if (key_link.check('N'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("10110"));
-				std::cout << "N ";
-			}
-			if (!key_link.check('N'))
-			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("10111"));
-				std::cout << "n ";
-			}
+
 		}
 		HidsCopy = HidsCopy->next;
 	}

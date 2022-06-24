@@ -3,12 +3,8 @@
 * ×÷Õß£ºÁõ×÷å«
 * https://blog.csdn.net/everlasting_20141622/article/details/52222006
 */
-#pragma once
 
-#ifndef PLANE_STD_WINDOWS_H_
-#include <Windows.h>
-#define PLANE_STD_WINDOWS_H_
-#endif // !PLANE_STD_WINDOWS_H_
+#pragma once
 
 #ifndef PLANE_STD_BITSET_
 #include <bitset>
@@ -20,6 +16,5 @@
 class KeyDetection
 {
 public:
-	void color(int a);
 	bool check(char c);
 };
