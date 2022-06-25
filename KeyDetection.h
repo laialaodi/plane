@@ -16,5 +16,10 @@
 class KeyDetection
 {
 public:
+	/*
+	* @brief 检测某个按键是否按下，按下就返回
+	* @param {char} c - 要检测的键
+	* @return 是否按下
+	*/
 	bool check(char c);
 };

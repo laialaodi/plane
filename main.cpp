@@ -1,5 +1,5 @@
 /*
-* 文件
+* 文件名：main.cpp
 * 飞机客户端
 * 作者：刘作瀚
 */
@@ -38,7 +38,7 @@ hid_device* handle = nullptr;
 * @param {LPCTSTR} PscSerialNumber - HID设备的序列号
 * @return 成功 - 0 失败 - -1
 */
-int OpenUSB(LPCTSTR PscSerialNumber)
+int openUSB(LPCTSTR PscSerialNumber)
 {
 	hid_device* handle = hid_open(0x154F, 0x4304, PscSerialNumber);// 打开指定vid、pid、序列号的设备
 	if (!handle)
@@ -62,7 +62,7 @@ int OpenUSB(LPCTSTR PscSerialNumber)
 * @brief 关闭USB-HID设备
 * @param {hid_device*&} handle - 操作句柄
 */
-bool CloseUSB(hid_device*& handle)
+bool closeUSB(hid_device*& handle)
 {
 	hid_close(handle);
 	handle = nullptr;//这里将指针置空，增强安全性
@@ -75,7 +75,7 @@ bool CloseUSB(hid_device*& handle)
 * @param 参数2：  {char*} Send      - 要发送的数据，第一位不要放数据，要留给报告编号
 * @return 成功 - true 失败 - false
 */
-bool SendMsg(hid_device* Usb, unsigned char* Send)
+bool sendMsg(hid_device* Usb, unsigned char* Send)
 {
 	Send[0] = 0x01;//报告编号，上位机向HID写数据时，每个包传输的第一个byte为写数据report ID，上、下位机必须一致。
 	//USB通信报告长度最短为32，加上一字节开头报告编号，最短为33。
@@ -95,7 +95,7 @@ bool SendMsg(hid_device* Usb, unsigned char* Send)
 * @param 输出参数1：  byte* pReceiveBuf  - 应答数据缓冲区
 * @return {int} 实际接收到数据的长度
 */
-int ReceiveMsg(hid_device* Usb, byte* pReceiveBuf, size_t nLength)
+int receiveMsg(hid_device* Usb, byte* pReceiveBuf, size_t nLength)
 {
 	// 接收报告必须将接收缓冲区首字节改为与设备一致才能通信成功
 	pReceiveBuf[0] = 0x01;
@@ -118,7 +118,7 @@ int main()
 {
 	if (hid_init())  // 初始化函数，实际上不调用它hid_enumerate和下面的hid_open也会自动调用
 		return -1;
-	KeyDetection key_link = KeyDetection();
+	KeyDetection keyLink = KeyDetection();
 	hid_device_info* Hids, * HidsCopy;  // 一个用于接收设备信息的单链表，另一个用来遍历，该结构体使用unicode编码，所以下面都要用unicode处理方式
 	Hids = hid_enumerate(0x04F2, 0xB5C0);  // 获取vid为0x154F，pid为0x4304的HID设备链表，这里如果都是0就是获取所有的HID设备
 	HidsCopy = Hids;
@@ -130,33 +130,33 @@ int main()
 			std::cout << HidsCopy->serial_number;
 			wpSerialNumber = HidsCopy->serial_number;  // 我这里只需要序列号，实际上这个结构体还有很多数据，可以参考官方的实例
 		}
-		OpenUSB(wpSerialNumber);
+		openUSB(wpSerialNumber);
 		while (true)
 		{
 			std::system("cls");
 			if (GetAsyncKeyState(VK_SPACE))
 			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("00001"));
+				sendMsg(handle, reinterpret_cast<unsigned char*> ("00001"));
 				std::cout << "VK_SPACE ";
 			}
-			if (KEY_DOWN('E'))
+			if (keyLink.check('E'))
 			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("00010"));
+				sendMsg(handle, reinterpret_cast<unsigned char*> ("00010"));
 				std::cout << "E ";
 			}
-			if (KEY_DOWN('W'))
+			if (keyLink.check('W'))
 			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("00011"));
+				sendMsg(handle, reinterpret_cast<unsigned char*> ("00011"));
 				std::cout << "W ";
 			}
-			if (KEY_DOWN('D'))
+			if (keyLink.check('D'))
 			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("00100"));
+				sendMsg(handle, reinterpret_cast<unsigned char*> ("00100"));
 				std::cout << "D ";
 			}
-			if (KEY_DOWN('S'))
+			if (keyLink.check('S'))
 			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("00101"));
+				sendMsg(handle, reinterpret_cast<unsigned char*> ("00101"));
 				std::cout << "S ";
 			}
 		}

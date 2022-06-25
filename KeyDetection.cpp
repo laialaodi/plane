@@ -20,7 +20,7 @@ public:
 	KeyDetection();
 	~KeyDetection();
 
-	bool check(char c)  // 检测某个按键是否按下，按下就改变一下变量
+	bool check(char c)
 	{
 		if (!KEY_DOWN(c)) return true;
 		else return false;
