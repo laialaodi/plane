@@ -33,15 +33,11 @@
 
 hid_device* handle = NULL;
 
-/*********************************************************
-函数名称： OpenUSB(LPCTSTR PscSerialNumber)
-函数功能： 打开USB-HID设备
-输入参数：
-	参数1：  LPCTSTR PscSerialNumber  - HID设备的序列号
-返回值：
-	成功 - 0
-	失败 - -1
-********************************************************/
+/*
+* @brief 打开USB-HID设备
+* @param {LPCTSTR} PscSerialNumber - HID设备的序列号
+* @return 成功 - 0 失败 - -1
+*/
 int OpenUSB(LPCTSTR PscSerialNumber)
 {
 	hid_device* handle = hid_open(0x154F, 0x4304, PscSerialNumber);// 打开指定vid、pid、序列号的设备
@@ -62,12 +58,10 @@ int OpenUSB(LPCTSTR PscSerialNumber)
 	return 0;
 }
 
-/*********************************************************
-函数名称： CloseUSB(hid_device*& handle)
-函数功能： 关闭USB-HID设备
-输入参数：
-	参数1：  hid_device*& handle  - 操作句柄
-********************************************************/
+/*
+* @brief 关闭USB-HID设备
+* @param {hid_device*&} handle - 操作句柄
+*/
 bool CloseUSB(hid_device*& handle)
 {
 	hid_close(handle);
@@ -75,16 +69,12 @@ bool CloseUSB(hid_device*& handle)
 	hid_exit();
 }
 
-/*********************************************************
-函数名称： SendMsg(hid_device* Usb, char* Send)
-函数功能： 向USB-HID设备发送报告
-输入参数：
-	参数1：  hid_device* Usb	 - USB-HID设备操作句柄
-	参数2：  char* Send	 - 要发送的数据，第一位不要放数据，要留给报告编号
-返回值：
-	成功 - true
-	失败 - false
-********************************************************/
+/*
+* @brief 向USB-HID设备发送报告
+* @param 参数1：  {hid_device*} Usb - USB-HID设备操作句柄
+* @param 参数2：  {char*} Send      - 要发送的数据，第一位不要放数据，要留给报告编号
+* @return 成功 - true 失败 - false
+*/
 bool SendMsg(hid_device* Usb, unsigned char* Send)
 {
 	Send[0] = 0x01;//报告编号，上位机向HID写数据时，每个包传输的第一个byte为写数据report ID，上、下位机必须一致。
@@ -98,30 +88,26 @@ bool SendMsg(hid_device* Usb, unsigned char* Send)
 	return true;
 }
 
-/*********************************************************
-函数名称： ReceiveMsg(hid_device* Usb, byte* pReceiveBuf, size_t nLength)
-函数功能： 接收来自USB-HID设备应答的报告
-输入参数：
-	参数1：  hid_device* Usb    - USB-HID设备操作句柄
-	参数2：  size_t nLength     - 应答缓冲区长度
-输出参数：
-	参数1：  byte* pReceiveBuf  - 应答数据缓冲区
-返回值：
-	实际接收到数据的长度
-********************************************************/
+/*
+* @brief 接收来自USB-HID设备应答的报告
+* @param 参数1：  {hid_device*} Usb      - USB-HID设备操作句柄
+* @param 参数2：  {size_t} nLength       - 应答缓冲区长度
+* @param 输出参数1：  byte* pReceiveBuf  - 应答数据缓冲区
+* @return {int} 实际接收到数据的长度
+*/
 int ReceiveMsg(hid_device* Usb, byte* pReceiveBuf, size_t nLength)
 {
-	//接收报告必须将接收缓冲区首字节改为与设备一致才能通信成功
+	// 接收报告必须将接收缓冲区首字节改为与设备一致才能通信成功
 	pReceiveBuf[0] = 0x01;
-	int nRecvLen = hid_get_feature_report(Usb, pReceiveBuf, 64);//这里必须设置接收长度，并且不管有没有数据，执行成功了返回的就是这里设置的值加上一字节报告ID，也就是65，实际上缓冲区里面全是0x00
+	int nRecvLen = hid_get_feature_report(Usb, pReceiveBuf, 64);  // 这里必须设置接收长度，并且不管有没有数据，执行成功了返回的就是这里设置的值加上一字节报告ID，也就是65，实际上缓冲区里面全是0x00
 	if (nRecvLen != 0)
 	{
-		//HID通信会自动补齐，如果没有数据就全部都是0x00
+		// HID通信会自动补齐，如果没有数据就全部都是0x00
 		if (pReceiveBuf[0] == 0x00)
-			nRecvLen = 0;//由于第一个字节设置为了0x01，所以第一个字节是0x00就认为没有收到数据。
-		else if (pReceiveBuf[1] == 0x1b)//判断实际接收到的数据长度，否则接收报告长度固定返回65
+			nRecvLen = 0;// 由于第一个字节设置为了0x01，所以第一个字节是0x00就认为没有收到数据。
+		else if (pReceiveBuf[1] == 0x1b)// 判断实际接收到的数据长度，否则接收报告长度固定返回65
 		{
-			//由于公司的协议里帧头是0x1b,帧头后面两位就是帧长度，因此可以通过解析帧长度获得实际接收的数据长度
+			// 由于公司的协议里帧头是0x1b,帧头后面两位就是帧长度，因此可以通过解析帧长度获得实际接收的数据长度
 			nRecvLen = (pReceiveBuf[2] << 8) | pReceiveBuf[3];
 		}
 	}
@@ -130,19 +116,19 @@ int ReceiveMsg(hid_device* Usb, byte* pReceiveBuf, size_t nLength)
 
 int main()
 {
-	if (hid_init())// 初始化函数，实际上不调用它hid_enumerate和下面的hid_open也会自动调用
+	if (hid_init())  // 初始化函数，实际上不调用它hid_enumerate和下面的hid_open也会自动调用
 		return -1;
 	KeyDetection key_link = KeyDetection();
-	hid_device_info* Hids, * HidsCopy;// 一个用于接收设备信息的单链表，另一个用来遍历，该结构体使用unicode编码，所以下面都要用unicode处理方式
-	Hids = hid_enumerate(0x04F2, 0xB5C0);// 获取vid为0x154F，pid为0x4304的HID设备链表，这里如果都是0就是获取所有的HID设备
+	hid_device_info* Hids, * HidsCopy;  // 一个用于接收设备信息的单链表，另一个用来遍历，该结构体使用unicode编码，所以下面都要用unicode处理方式
+	Hids = hid_enumerate(0x04F2, 0xB5C0);  // 获取vid为0x154F，pid为0x4304的HID设备链表，这里如果都是0就是获取所有的HID设备
 	HidsCopy = Hids;
-	LPCWSTR wpSerialNumber = L"\0";// 用来去重，一个hid设备一般有多个端点，因此会读到多个
+	LPCWSTR wpSerialNumber = L"\0";  // 用来去重，一个hid设备一般有多个端点，因此会读到多个
 	while (HidsCopy)
 	{
 		if (CompareStringW(LOCALE_INVARIANT, NORM_LINGUISTIC_CASING, wpSerialNumber, -1, HidsCopy->serial_number, -1) != CSTR_EQUAL)
 		{
 			std::cout << HidsCopy->serial_number;
-			wpSerialNumber = HidsCopy->serial_number;// 我这里只需要序列号，实际上这个结构体还有很多数据，可以参考官方的实例
+			wpSerialNumber = HidsCopy->serial_number;  // 我这里只需要序列号，实际上这个结构体还有很多数据，可以参考官方的实例
 		}
 		OpenUSB(wpSerialNumber);
 		while (true)
