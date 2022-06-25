@@ -153,12 +153,26 @@ int main()
 				SendMsg(handle, reinterpret_cast<unsigned char*> ("00001"));
 				std::cout << "VK_SPACE ";
 			}
-			if (GetAsyncKeyState(VK_SPACE))
+			if (KEY_DOWN('E'))
 			{
-				SendMsg(handle, reinterpret_cast<unsigned char*> ("00001"));
-				std::cout << "VK_SPACE ";
+				SendMsg(handle, reinterpret_cast<unsigned char*> ("00010"));
+				std::cout << "E ";
 			}
-
+			if (KEY_DOWN('W'))
+			{
+				SendMsg(handle, reinterpret_cast<unsigned char*> ("00011"));
+				std::cout << "W ";
+			}
+			if (KEY_DOWN('D'))
+			{
+				SendMsg(handle, reinterpret_cast<unsigned char*> ("00100"));
+				std::cout << "D ";
+			}
+			if (KEY_DOWN('S'))
+			{
+				SendMsg(handle, reinterpret_cast<unsigned char*> ("00101"));
+				std::cout << "S ";
+			}
 		}
 		HidsCopy = HidsCopy->next;
 	}
