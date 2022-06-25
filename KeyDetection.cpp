@@ -1,13 +1,7 @@
 /*
 * 文件名：KeyDetection.cpp
 * 作者：刘作瀚
-* https://blog.csdn.net/everlasting_20141622/article/details/52222006
 */
-
-#ifndef PLANE_STD_WINDOWS_H_
-#include <Windows.h>
-#define PLANE_STD_WINDOWS_H_
-#endif // !PLANE_STD_WINDOWS_H_
 
 #ifndef PLANE_HEADERS_KEYDETECTION_H_
 #include "KeyDetection.h"
@@ -17,22 +11,32 @@
 class KeyDetection
 {
 public:
-	KeyDetection();
-	~KeyDetection();
-
+	/*
+	* @brief 检查某个键是否被按下
+	* @param {char} c - 要检查的键
+	* @return 是否按下
+	*/
 	bool check(char c)
 	{
-		if (!KEY_DOWN(c)) return true;
-		else return false;
+		if (KEY_DOWN(c))
+		{
+			size_t _i = 0;
+			while (_i < 10000)  // 循环大概在0.5秒左右
+			{
+				if (!KEY_DOWN(c))
+				{
+					return true;
+				}
+				_i++;
+			}
+			return false;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 private:
+
 };
-
-KeyDetection::KeyDetection()
-{
-}
-
-KeyDetection::~KeyDetection()
-{
-}

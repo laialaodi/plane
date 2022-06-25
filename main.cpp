@@ -134,27 +134,22 @@ int main()
 		while (true)
 		{
 			std::system("cls");
-			if (GetAsyncKeyState(VK_SPACE))
-			{
-				sendMsg(handle, reinterpret_cast<unsigned char*> ("00001"));
-				std::cout << "VK_SPACE ";
-			}
-			if (keyLink.check('E'))
+			if (KEY_DOWN('E'))
 			{
 				sendMsg(handle, reinterpret_cast<unsigned char*> ("00010"));
 				std::cout << "E ";
 			}
-			if (keyLink.check('W'))
+			if (KEY_DOWN('W'))
 			{
 				sendMsg(handle, reinterpret_cast<unsigned char*> ("00011"));
 				std::cout << "W ";
 			}
-			if (keyLink.check('D'))
+			if (KEY_DOWN('D'))
 			{
 				sendMsg(handle, reinterpret_cast<unsigned char*> ("00100"));
 				std::cout << "D ";
 			}
-			if (keyLink.check('S'))
+			if (KEY_DOWN('S'))
 			{
 				sendMsg(handle, reinterpret_cast<unsigned char*> ("00101"));
 				std::cout << "S ";
