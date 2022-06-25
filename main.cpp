@@ -31,7 +31,7 @@
 
 #pragma comment (lib, "setupapi.lib")
 
-hid_device* handle;
+hid_device* handle = NULL;
 
 /*********************************************************
 º¯ÊýÃû³Æ£º OpenUSB(LPCTSTR PscSerialNumber)
