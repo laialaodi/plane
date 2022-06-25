@@ -31,7 +31,7 @@
 
 #pragma comment (lib, "setupapi.lib")
 
-hid_device* handle = NULL;
+hid_device* handle = nullptr;
 
 /*
 * @brief 打开USB-HID设备
