@@ -137,13 +137,17 @@ int main()
 			std::system("cls");
 			if (KEY_DOWN('E') && eDown <= 10000)
 			{
-				sendMsg(handle, reinterpret_cast<unsigned char*> ("00010"));
 				std::cout << "E ";
 				++eDown;
 			}
 			else
 			{
 				if (eDown <= 10000)
+				{
+					sendMsg(handle, reinterpret_cast<unsigned char*> ("00010"));
+					std::cout << "PE ";
+				}
+				else
 				{
 
 				}
