@@ -146,27 +146,53 @@ int main()
 				{
 					sendMsg(handle, reinterpret_cast<unsigned char*> ("00010"));
 					std::cout << "CE ";
-					eDown = 0;
 				}
-				else
-				{
+				eDown = 0;
+			}
 
-				}
-			}
-			if (KEY_DOWN('W'))
+			if (KEY_DOWN('W') && wDown <= 10000)
 			{
-				sendMsg(handle, reinterpret_cast<unsigned char*> ("00011"));
 				std::cout << "W ";
+				++wDown;
 			}
-			if (KEY_DOWN('D'))
+			else
 			{
-				sendMsg(handle, reinterpret_cast<unsigned char*> ("00100"));
+				if (wDown <= 10000)
+				{
+					sendMsg(handle, reinterpret_cast<unsigned char*> ("00011"));
+					std::cout << "CW ";
+				}
+				wDown = 0;
+			}
+
+			if (KEY_DOWN('D') && dDown <= 10000)
+			{
 				std::cout << "D ";
+				++dDown;
 			}
-			if (KEY_DOWN('S'))
+			else
 			{
-				sendMsg(handle, reinterpret_cast<unsigned char*> ("00101"));
+				if (dDown <= 10000)
+				{
+					sendMsg(handle, reinterpret_cast<unsigned char*> ("00100"));
+					std::cout << "CD ";
+				}
+				dDown = 0;
+			}
+
+			if (KEY_DOWN('S') && sDown <= 10000)
+			{
 				std::cout << "S ";
+				++sDown;
+			}
+			else
+			{
+				if (sDown <= 10000)
+				{
+					sendMsg(handle, reinterpret_cast<unsigned char*> ("00101"));
+					std::cout << "CS ";
+				}
+				sDown = 0;
 			}
 		}
 		HidsCopy = HidsCopy->next;
