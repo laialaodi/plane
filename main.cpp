@@ -145,7 +145,8 @@ int main()
 				if (eDown <= 10000)
 				{
 					sendMsg(handle, reinterpret_cast<unsigned char*> ("00010"));
-					std::cout << "PE ";
+					std::cout << "CE ";
+					eDown = 0;
 				}
 				else
 				{
