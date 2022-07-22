@@ -118,6 +118,7 @@ int main()
 {
 	if (hid_init())  // 初始化函数，实际上不调用它hid_enumerate和下面的hid_open也会自动调用
 		return -1;
+	int eDown = 0, wDown = 0, dDown = 0, sDown = 0;
 	KeyDetection keyLink = KeyDetection();
 	hid_device_info* Hids, * HidsCopy;  // 一个用于接收设备信息的单链表，另一个用来遍历，该结构体使用unicode编码，所以下面都要用unicode处理方式
 	Hids = hid_enumerate(0x04F2, 0xB5C0);  // 获取vid为0x154F，pid为0x4304的HID设备链表，这里如果都是0就是获取所有的HID设备
